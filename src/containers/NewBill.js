@@ -19,7 +19,10 @@ export default class NewBill {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
-    this.firestore
+
+    if (fileName.endsWith(".jpeg") || fileName.endsWith(".jpg") || fileName.endsWith(".png")) {
+
+      this.firestore
       .storage
       .ref(`justificatifs/${fileName}`)
       .put(file)
@@ -28,6 +31,12 @@ export default class NewBill {
         this.fileUrl = url
         this.fileName = fileName
       })
+    
+    } else {
+      alert("Format non supporté: "+fileName+". seul les formats jpeg, jpg et png sont supportés.")
+      this.document.querySelector(`input[data-testid="file"]`).value=""
+    }
+    
   }
   handleSubmit = e => {
     e.preventDefault()
