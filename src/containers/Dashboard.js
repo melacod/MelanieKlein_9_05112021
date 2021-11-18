@@ -74,6 +74,10 @@ export default class {
     $('#arrow-icon1').click((e) => this.handleShowTickets(e, bills, 1))
     $('#arrow-icon2').click((e) => this.handleShowTickets(e, bills, 2))
     $('#arrow-icon3').click((e) => this.handleShowTickets(e, bills, 3))
+    
+    // array of indicators to check ticket group status: open or close
+    this.openTicketGroups = [false, false, false]
+    
     this.getBillsAllUsers()
     new Logout({ localStorage, onNavigate })
   }
@@ -131,23 +135,34 @@ export default class {
   }
 
   handleShowTickets(e, bills, index) {
-    if (this.counter === undefined || this.index !== index) this.counter = 0
     if (this.index === undefined || this.index !== index) this.index = index
-    if (this.counter % 2 === 0) {
+    
+    // check if ticket group is opened or closed
+    if (this.openTicketGroups[this.index - 1] === false) {
+
+      // ticket group was closed, open it
+      this.openTicketGroups[this.index - 1] = true
+
+      let fiteredBills = filteredBills(bills, getStatus(this.index))
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
       $(`#status-bills-container${this.index}`)
-        .html(cards(filteredBills(bills, getStatus(this.index))))
+        .html(cards(fiteredBills))
       this.counter ++
+
+      // add event only in filtered bills when open ticket group
+      fiteredBills.forEach(bill => {
+        $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+      })
+
     } else {
+
+      // ticket group was opened, close it
+      this.openTicketGroups[this.index - 1] = false
+
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
       $(`#status-bills-container${this.index}`)
-        .html("")
-      this.counter ++
+        .html("")    
     }
-
-    bills.forEach(bill => {
-      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
-    })
 
     return bills
 
