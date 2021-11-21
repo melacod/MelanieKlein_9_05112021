@@ -144,10 +144,10 @@ export default class {
       this.openTicketGroups[this.index - 1] = true
 
       let fiteredBills = filteredBills(bills, getStatus(this.index))
+      
       $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
       $(`#status-bills-container${this.index}`)
         .html(cards(fiteredBills))
-      this.counter ++
 
       // add event only in filtered bills when open ticket group
       fiteredBills.forEach(bill => {
