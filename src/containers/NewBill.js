@@ -22,16 +22,18 @@ export default class NewBill {
 
     if (fileName.endsWith(".jpeg") || fileName.endsWith(".jpg") || fileName.endsWith(".png")) {
 
-      this.firestore
-      .storage
-      .ref(`justificatifs/${fileName}`)
-      .put(file)
-      .then(snapshot => snapshot.ref.getDownloadURL())
-      .then(url => {
-        this.fileUrl = url
-        this.fileName = fileName
-      })
-    
+      if (this.firestore) {
+        this.firestore
+        .storage
+        .ref(`justificatifs/${fileName}`)
+        .put(file)
+        .then(snapshot => snapshot.ref.getDownloadURL())
+        .then(url => {
+          this.fileUrl = url
+          this.fileName = fileName
+        })
+      }
+
     } else {
       alert("Format non supporté: "+fileName+". seul les formats jpeg, jpg et png sont supportés.")
       this.document.querySelector(`input[data-testid="file"]`).value=""
