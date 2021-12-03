@@ -5,6 +5,7 @@ import { localStorageMock } from "../__mocks__/localStorage.js"
 import firebase from "../__mocks__/firebase"
 import Bills from "../containers/Bills.js"
 import { ROUTES } from "../constants/routes.js"
+import { activeIcon1 } from "../views/VerticalLayout.js"
 
 describe("Given I am connected as an employee", () => {
 
@@ -39,16 +40,10 @@ describe("Given I am connected as an employee", () => {
     test("Then bill icon in vertical layout should be highlighted", () => {
       const html = BillsUI({ data: []})
       document.body.innerHTML = html
+      activeIcon1()
 
-      // Check only if WindowIcon (bill icon) is present
       expect(screen.getByTestId('icon-window')).toBeTruthy()
-
-      // fails because 'active-icon' class on WindowIcon (bill icon) is added in Router not in BillsUI
-      // expect(screen.getByTestId('icon-window').classList.contains('active-icon')).toBeTruthy()
-
-      // same problem as above but try to use jest-dom utility function toHaveClass
-      // => it does not works = having exception 'toHaveClass is not a function'
-      // expect(screen.getByTestId('icon-window')).toHaveClass('active-icon')
+      expect(screen.getByTestId('icon-window').classList.contains('active-icon')).toBeTruthy()
     })
 
     test("Then bills should be ordered from earliest to latest", () => {

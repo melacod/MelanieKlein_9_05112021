@@ -2,6 +2,20 @@ import WindowIcon from "../assets/svg/window.js"
 import MailIcon from "../assets/svg/mail.js"
 import DisconnectIcon from "../assets/svg/disconnect.js"
 
+export function activeIcon1 () {
+  const divIcon1 = document.getElementById('layout-icon1')
+  const divIcon2 = document.getElementById('layout-icon2')
+  divIcon1.classList.add('active-icon')
+  divIcon2.classList.remove('active-icon')
+}
+
+export function activeIcon2 () {
+  const divIcon1 = document.getElementById('layout-icon1')
+  const divIcon2 = document.getElementById('layout-icon2')
+  divIcon1.classList.remove('active-icon')
+  divIcon2.classList.add('active-icon')
+}
+
 export default (height) => {
     let user;
     user = JSON.parse(localStorage.getItem('user'))

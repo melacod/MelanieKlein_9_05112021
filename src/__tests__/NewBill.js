@@ -3,6 +3,7 @@ import NewBillUI from "../views/NewBillUI.js"
 import NewBill from "../containers/NewBill.js"
 import { localStorageMock } from "../__mocks__/localStorage.js"
 import { ROUTES } from "../constants/routes.js"
+import { activeIcon2 } from "../views/VerticalLayout.js"
 
 describe("Given I am connected as an employee", () => {
 
@@ -24,6 +25,7 @@ describe("Given I am connected as an employee", () => {
       // Create NewBill page
       const html = NewBillUI()
       document.body.innerHTML = html
+      activeIcon2()
 
       // Check NewBill page rendered
       expect(screen.getByTestId('form-new-bill')).toBeTruthy()
@@ -37,6 +39,7 @@ describe("Given I am connected as an employee", () => {
       // Create NewBill page
       const html = NewBillUI()
       document.body.innerHTML = html
+      activeIcon2()
 
       // Check NewBill page rendered
       expect(screen.getByTestId('form-new-bill')).toBeTruthy()
@@ -71,6 +74,7 @@ describe("Given I am connected as an employee", () => {
       // Create NewBill page
       const html = NewBillUI()
       document.body.innerHTML = html
+      activeIcon2()
 
       // Check NewBill page rendered
       expect(screen.getByTestId('form-new-bill')).toBeTruthy()
@@ -98,6 +102,7 @@ describe("Given I am connected as an employee", () => {
       // Create NewBill page
       const html = NewBillUI()
       document.body.innerHTML = html
+      activeIcon2()
       expect(screen.getByTestId('form-new-bill')).toBeTruthy()
       expect(screen.getByTestId('file')).toBeTruthy()
       
