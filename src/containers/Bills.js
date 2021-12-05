@@ -27,10 +27,16 @@ export default class {
     $('#modaleFile').modal('show')
   }
 
-  // not need to cover this function by tests
   getBills = () => {
-    const userEmail = localStorage.getItem('user') ?
-      JSON.parse(localStorage.getItem('user')).email : ""
+   
+    // Properly get user email
+    let user;
+    user = JSON.parse(localStorage.getItem('user'))
+    if (typeof user === 'string') {
+      user = JSON.parse(user)
+    }
+    const userEmail = user ? user.email : ""
+
     if (this.firestore) {
       return this.firestore
       .bills()
