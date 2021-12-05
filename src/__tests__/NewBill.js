@@ -45,8 +45,16 @@ describe("Given I am connected as an employee", () => {
       expect(screen.getByTestId('form-new-bill')).toBeTruthy()
       expect(screen.getByTestId('btn-send-bill')).toBeTruthy()
       
+      // Mock bill collection with bill document
+      const billCollection = { add: (bill) => { return Promise.resolve( bill ) } }
+
+      // Mock firestore with bill collection
+      const firestoreMock = {
+        bills: () => billCollection
+      };
+
       // Create NewBill manager
-      const container = new NewBill({document, onNavigate, firestore:null, localStorageMock})
+      const container = new NewBill({document, onNavigate, firestore:firestoreMock, localStorageMock})
       
       // Add test value to input fields
       screen.getByTestId('expense-type').value='Transports'
@@ -83,15 +91,35 @@ describe("Given I am connected as an employee", () => {
       // Mock window.alert
       jest.spyOn(window, 'alert').mockImplementation(() => {});
       
+      // Mock file
+      const mockFile = { ref: { getDownloadURL: () => 'testUrl' } }
+
+      // Mock ref collection with file
+      const refCollection = { put: (file) => { return Promise.resolve( mockFile ) } }
+
+      // Mock firestore with ref collection
+      const firestoreMock = {
+        storage: { ref: (path) => refCollection }
+      };
+
       // Create NewBill manager
-      const container = new NewBill({document, onNavigate, firestore:null, localStorageMock})
+      const container = new NewBill({document, onNavigate, firestore:firestoreMock, localStorageMock})
       
       // Execute handle change file with 'test.png'
       const event = { target: { value: 'test.png' } }
-      container.handleChangeFile(event)
-      
-      // Check that no error message has been called
-      expect(window.alert).not.toBeCalled()
+
+      // Use promise to wait for firestore 'then' to finish before checking values
+      new Promise((resolve, reject) => {
+        container.handleChangeFile(event)
+      }).then( () => {
+
+        // Expect fileUrl and fileName to be set with file values
+        expect(container.fileUrl).toEqual('testUrl')
+        expect(container.fileName).toEqual('test.png')
+
+        // Check that no error message has been called
+        expect(window.alert).not.toBeCalled()
+      })
 
     })
   })

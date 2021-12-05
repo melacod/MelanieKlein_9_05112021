@@ -6,13 +6,15 @@ import firebase from "../__mocks__/firebase"
 import Bills from "../containers/Bills.js"
 import { ROUTES } from "../constants/routes.js"
 import { activeIcon1 } from "../views/VerticalLayout.js"
+import { formatDate, formatStatus } from "../app/format.js"
 
 describe("Given I am connected as an employee", () => {
 
   // Connect with user type 'Employee' to have VerticalLayout with WindowIcon (bill icon)
   Object.defineProperty(window, 'localStorage', { value: localStorageMock })
   window.localStorage.setItem('user', JSON.stringify({
-    type: 'Employee'
+    type: 'Employee',
+    email: "a@a"
   }))
 
   const onNavigate = (pathname) => {
@@ -55,6 +57,48 @@ describe("Given I am connected as an employee", () => {
       expect(dates).toEqual(datesSorted)
     })
 
+  })
+
+  describe("When I am on Bills Page", () => {
+    test("Then bills should be loaded with date/status formatted", () => {
+
+      // Mock bill data using existing test data
+      const billData = bills[0]
+
+      // Mock bill document with bill data
+      const billDocument = {
+        data: () => { return billData }
+      }
+
+      // Mock bill collection with bill document
+      const billCollection = { get: () => { return Promise.resolve( { docs: [ billDocument ] } ) } }
+
+      // Mock firestore with bill collection
+      const firestoreMock = {
+        bills: () => billCollection
+      };
+      
+      // Create bill container 
+      const container = new Bills({document, onNavigate, firestore:firestoreMock, localStorageMock})
+
+      // Expected bill data to receive from getBills
+      const expectedBillData = {
+        ...billData,
+        date: formatDate(billData.date),
+        status: formatStatus(billData.status)
+      }
+
+      // Invoke async getBills function
+      container.getBills().then( loadedBills => {
+
+        // Expect to have mock bill returned with formatted date/status
+        expect(loadedBills).toBeTruthy()
+        expect(loadedBills.length).toEqual(1)
+        expect(loadedBills[0]).toEqual(expectedBillData)
+        
+      });
+
+    })
   })
 
   describe("When I am on Bills Page and I click on New Bill button", () => {
