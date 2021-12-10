@@ -11,8 +11,10 @@
 .col-half-row {
   display:flex;
   width: 75%;
-  margin-left: 20px;
+  margin-left: auto;
+  margin-right: auto;
   margin-top: 16px;
+  justify-content: space-between;
 }
 
 .blue-border {
@@ -27,10 +29,6 @@ label {
   font-weight: 500;
   font-size: 14px;
   line-height: 16px;
-}
-
-.flex-col {
-  margin-left: 50px;
 }
 
 .white-text {
