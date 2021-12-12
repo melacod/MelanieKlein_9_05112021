@@ -19,6 +19,7 @@ export default class NewBill {
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
+    $('div[data-testid="fileError"]').html("").hide();
 
     if (fileName.endsWith(".jpeg") || fileName.endsWith(".jpg") || fileName.endsWith(".png")) {
 
@@ -35,7 +36,8 @@ export default class NewBill {
       }
 
     } else {
-      alert("Format non supporté: "+fileName+". seul les formats jpeg, jpg et png sont supportés.")
+      const message = "Fichier ignoré: '"+fileName+"'. Seuls les formats jpeg, jpg et png sont supportés.";
+      $('div[data-testid="fileError"]').html(message).show();
       this.document.querySelector(`input[data-testid="file"]`).value=""
     }
     

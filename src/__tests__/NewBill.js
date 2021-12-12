@@ -134,9 +134,6 @@ describe("Given I am connected as an employee", () => {
       expect(screen.getByTestId('form-new-bill')).toBeTruthy()
       expect(screen.getByTestId('file')).toBeTruthy()
       
-      // Mock window.alert
-      jest.spyOn(window, 'alert').mockImplementation(() => {});
-
       // Create NewBill manager
       const container = new NewBill({document, onNavigate, firestore:null, localStorageMock})
       
@@ -144,8 +141,8 @@ describe("Given I am connected as an employee", () => {
       const event = { target: { value: 'test.pdf' } }
       container.handleChangeFile(event)
       
-      // Check that error message has been called with expected message
-      expect(window.alert).toBeCalledWith("Format non supporté: test.pdf. seul les formats jpeg, jpg et png sont supportés.");
+      // Check that error message is rendered
+      expect(screen.getAllByText("Fichier ignoré: 'test.pdf'. Seuls les formats jpeg, jpg et png sont supportés.")).toBeTruthy()
 
     })
   })
