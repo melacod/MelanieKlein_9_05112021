@@ -94,11 +94,26 @@ describe('Given I am connected as an Admin', () => {
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
-      const firestore = null
+      
+      // Mock bill data using existing test data
+      const billData = bills[0]
+
+      // Mock bill document with bill data
+      const billDocument = {
+        data: () => { return billData }
+      }
+
+      // Mock bill collection with bill document
+      const billCollection = { get: () => Promise.resolve( { docs: [ billDocument ] } ) }
+
+      // Mock firestore with bill collection
+      const firestoreMock = {
+        bills: () => billCollection
+      }
 
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
       const dashboard = new Dashboard({
-        document, onNavigate, firestore, bills, localStorage: window.localStorage
+        document, onNavigate, firestore: firestoreMock, bills, localStorage: window.localStorage
       })
 
       const handleEditTicket = jest.fn((e) => dashboard.handleEditTicket(e, bills[0], bills))   
@@ -134,9 +149,34 @@ describe('Given I am connected as Admin, and I am on Dashboard page, and I click
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
       }
-      const firestore = null
+      
+      // Mock firestore API for bill / bills
+      
+      // Mock bill data using existing test data
+      const billData = bills[0]
+
+      // Mock bill document with bill data
+      const billDocument = {
+        data: () => { return billData }
+      }
+
+      // Mock bill collection with bill document
+      const billCollection = { 
+        get: () => Promise.resolve( { docs: [ billDocument ] } ) 
+      }
+
+      const mockUpdate = {
+        update: (bill) => Promise.resolve(bill)
+      }
+
+      const firestoreMock = {
+        bill: (id) => mockUpdate,
+        bills: () => billCollection
+      }
+      
+      // Create dashboard manager with firestore mock
       const dashboard = new Dashboard({
-        document, onNavigate, firestore, bills, localStorage: window.localStorage
+        document, onNavigate, firestore: firestoreMock, bills, localStorage: window.localStorage
       })
 
       const acceptButton = screen.getByTestId("btn-accept-bill-d")

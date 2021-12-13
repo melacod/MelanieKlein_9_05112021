@@ -46,7 +46,7 @@ describe("Given I am connected as an employee", () => {
       expect(screen.getByTestId('btn-send-bill')).toBeTruthy()
       
       // Mock bill collection with bill document
-      const billCollection = { add: (bill) => { return Promise.resolve( bill ) } }
+      const billCollection = { add: (bill) => Promise.resolve( bill ) }
 
       // Mock firestore with bill collection
       const firestoreMock = {
@@ -95,7 +95,7 @@ describe("Given I am connected as an employee", () => {
       const mockFile = { ref: { getDownloadURL: () => 'testUrl' } }
 
       // Mock ref collection with file
-      const refCollection = { put: (file) => { return Promise.resolve( mockFile ) } }
+      const refCollection = { put: (file) => Promise.resolve( mockFile ) }
 
       // Mock firestore with ref collection
       const firestoreMock = {

@@ -71,12 +71,12 @@ describe("Given I am connected as an employee", () => {
       }
 
       // Mock bill collection with bill document
-      const billCollection = { get: () => { return Promise.resolve( { docs: [ billDocument ] } ) } }
+      const billCollection = { get: () => Promise.resolve( { docs: [ billDocument ] } ) }
 
       // Mock firestore with bill collection
       const firestoreMock = {
         bills: () => billCollection
-      };
+      }
       
       // Create bill container 
       const container = new Bills({document, onNavigate, firestore:firestoreMock, localStorageMock})

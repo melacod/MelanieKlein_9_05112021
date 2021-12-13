@@ -78,14 +78,35 @@ describe("Given that I am a user on login page", () => {
 
     let PREVIOUS_LOCATION = ''
 
-    const firebase = jest.fn()
+    // Mock firestore api user / users
+    const mockUserObj = {
+      exists : true
+    }
 
+    const mockUser = {
+      get: () => Promise.resolve(mockUserObj)
+    }
+
+    const mockDoc = { 
+      set: ({type, name}) => Promise.resolve()
+    }
+
+    const mockUsers = {
+      doc: (email) => mockDoc
+    }
+
+    const firestoreMock = {
+      user: (email) => mockUser,
+      users: () => mockUsers
+    }
+
+    // Create login manager with firestore mock API
     const login = new Login({
       document,
       localStorage: window.localStorage,
       onNavigate,
       PREVIOUS_LOCATION,
-      firebase
+      firestore: firestoreMock
     })
 
     const handleSubmit = jest.fn(login.handleSubmitEmployee)    
@@ -188,14 +209,35 @@ describe("Given that I am a user on login page", () => {
 
       let PREVIOUS_LOCATION = ''
 
-      const firebase = jest.fn()
+      // Mock firestore api user / users
+      const mockUserObj = {
+        exists: false
+      }
 
+      const mockUser = {
+        get: () => Promise.resolve(mockUserObj)
+      }
+
+      const mockDoc = { 
+        set: ({type, name}) => Promise.resolve()
+      }
+
+      const mockUsers = {
+        doc: (email) => mockDoc
+      }
+
+      const firestoreMock = {
+        user: (email) => mockUser,
+        users: () => mockUsers
+      }
+
+      // Create login manager with firestore mock API
       const login = new Login({
         document,
         localStorage: window.localStorage,
         onNavigate,
         PREVIOUS_LOCATION,
-        firebase
+        firestore: firestoreMock
       })
 
       const handleSubmit = jest.fn(login.handleSubmitAdmin)    
